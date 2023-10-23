@@ -1,7 +1,8 @@
 <script setup>
-import { ref } from "vue";
 import TaskDetails from "./components/TaskDetails.vue";
+import TaskForm from "./components/TaskForm.vue";
 import { useTaskStore } from "./stores/TaskStore"
+import { ref } from "vue";
 
 const taskStore = useTaskStore()
 const filter = ref('all')
@@ -17,6 +18,11 @@ const filter = ref('all')
     <img src="./assets/pinia-logo.svg" alt="Pinia logo">
     <h1>Pinia Tasks</h1>
   </header>
+
+  <!-- New Task Form -->
+  <div class="new-task-form">
+    <TaskForm />
+  </div>
 
   <!-- Filter Nav -->
   <nav class="filter">
