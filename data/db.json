@@ -1,17 +1,12 @@
 {
   "tasks": [
     {
-      "title": "buy some mil",
-      "isFav": false,
-      "id": 3
-    },
-    {
       "title": "test this code",
       "isFav": true,
       "id": 4
     },
     {
-      "title": "buy grocery",
+      "title": "Buy some food",
       "isFav": false,
       "id": 5
     }

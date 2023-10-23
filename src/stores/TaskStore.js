@@ -24,54 +24,70 @@ export const useTaskStore = defineStore("taskStore", {
 
   actions: {
     async getTasks() {
-      this.Loading = true;
-      const res = await fetch("http://localhost:3000/tasks");
-      const data = await res.json();
+      try {
+        this.Loading = true;
+        const res = await fetch("http://localhost:3000/tasks");
+        const data = await res.json();
 
-      this.tasks = data;
-      this.Loading = false;
+        this.tasks = data;
+        this.Loading = false;
+      } catch (error) {
+        console.error("An error occurred:", error);
+      }
     },
 
     async addTasks(task) {
-      this.tasks.push(task);
+      try {
+        this.tasks.push(task);
 
-      const res = await fetch("http://localhost:3000/tasks", {
-        method: "POST",
-        body: JSON.stringify(task),
-        headers: { "Content-Type": "application/json" },
-      });
+        const res = await fetch("http://localhost:3000/tasks", {
+          method: "POST",
+          body: JSON.stringify(task),
+          headers: { "Content-Type": "application/json" },
+        });
 
-      if (res.error) {
-        console.log(res.error);
+        if (res.error) {
+          console.log(res.error);
+        }
+      } catch (error) {
+        console.error("An error occurred:", error);
       }
     },
 
     async deleteTask(id) {
-      this.tasks = this.tasks.filter((t) => {
-        return t.id !== id;
-      });
+      try {
+        const res = await fetch("http://localhost:3000/tasks/" + id, {
+          method: "DELETE",
+        });
 
-      const res = await fetch("http://localhost:3000/tasks/" + id, {
-        method: "DELETE",
-      });
+        if (!res.ok) {
+          throw new Error(
+            `Failed to delete task: ${res.status} - ${res.statusText}`
+          );
+        }
 
-      if (res.error) {
-        console.log(res.error);
+        this.tasks = this.tasks.filter((t) => t.id !== id);
+      } catch (error) {
+        console.error(error);
       }
     },
 
     async toggleFav(id) {
-      const task = this.tasks.find((t) => t.id === id);
-      task.isFav = !task.isFav;
+      try {
+        const task = this.tasks.find((task) => task.id === id);
+        task.isFav = !task.isFav;
 
-      const res = await fetch("http://localhost:3000/tasks/" + id, {
-        method: "PATCH",
-        body: JSON.stringify({ isFav: task.isFav }),
-        headers: { "Content-Type": "application/json" },
-      });
+        const res = await fetch("http://localhost:3000/tasks/" + id, {
+          method: "PATCH",
+          body: JSON.stringify({ isFav: task.isFav }),
+          headers: { "Content-Type": "application/json" },
+        });
 
-      if (res.error) {
-        console.log(res.error);
+        if (res.error) {
+          console.log(res.error);
+        }
+      } catch (error) {
+        console.error("An error occurred:", error);
       }
     },
   },
