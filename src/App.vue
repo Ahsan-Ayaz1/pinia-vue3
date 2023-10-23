@@ -3,10 +3,11 @@ import TaskDetails from "./components/TaskDetails.vue";
 import TaskForm from "./components/TaskForm.vue";
 import { useTaskStore } from "./stores/TaskStore"
 import { onMounted, ref } from "vue";
+import { storeToRefs } from "pinia";
 
 const taskStore = useTaskStore()
+const { tasks, Loading, favs, totalCount, favCount } = storeToRefs(taskStore)
 const filter = ref('all')
-// taskStore.getTasks()
 
 onMounted(() => {
   taskStore.getTasks()
@@ -14,10 +15,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <main>
-
-  </main>
-
   <!-- Heading -->
   <header>
     <img src="./assets/pinia-logo.svg" alt="Pinia logo">
@@ -35,21 +32,21 @@ onMounted(() => {
     <button @click="filter = 'favs'">Favorite Tasks</button>
   </nav>
 
-  <div v-if="taskStore.Loading" class="loading">
+  <div v-if="Loading" class="loading">
     Loading Tasks...
   </div>
 
   <!-- Task List -->
   <div class="task-list" v-if="filter == 'all'">
-    <p>You have {{ taskStore.totalCount }} tasks left to do</p>
-    <div v-for="task in taskStore.tasks" :key="task.id">
+    <p>You have {{ totalCount }} tasks left to do</p>
+    <div v-for="task in tasks" :key="task.id">
       <TaskDetails :task="task" />
     </div>
   </div>
 
   <div class="task-list" v-if="filter == 'favs'">
-    <p>You have {{ taskStore.favCount }} fav left to do</p>
-    <div v-for="task in taskStore.favs" :key="task.id">
+    <p>You have {{ favCount }} fav left to do</p>
+    <div v-for="task in favs" :key="task.id">
       <TaskDetails :task="task" />
     </div>
   </div>
